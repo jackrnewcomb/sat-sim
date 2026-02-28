@@ -3,3 +3,9 @@ build*/
 *.so
 *.dylib
 *.exe
+out*/
+.cache/
+compile_commands.json
+*.user
+*.vcxproj*
+*.sln

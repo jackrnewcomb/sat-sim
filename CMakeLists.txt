@@ -7,6 +7,7 @@ option(SIMCORE_BUILD_SHARED "Build simcore as a shared library (for Unity)" ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Good defaults
 if (MSVC)

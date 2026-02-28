@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        preset: [debug]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install Ninja + Clang tooling
+      - name: Install deps (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build clang clang-tidy clang-format
+
+      - name: Install deps (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install ninja llvm
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+
+      - name: Install deps (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install ninja llvm -y
+          echo "C:\Program Files\LLVM\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Configure
+        run: cmake --preset ${{ matrix.preset }}
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Test
+        run: ctest --preset ${{ matrix.preset }}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build clang clang-tidy clang-format
+
+      - name: clang-format check
+        run: |
+          chmod +x tools/format-check.sh
+          tools/format-check.sh
+
+      - name: clang-tidy
+        run: |
+          chmod +x tools/tidy.sh
+          tools/tidy.sh debug
