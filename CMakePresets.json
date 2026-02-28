@@ -5,12 +5,11 @@
     "minor": 20,
     "patch": 0
   },
+
   "configurePresets": [
     {
       "name": "base",
       "hidden": true,
-      "generator": "Visual Studio 17 2022",
-      "architecture": "x64",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "CMAKE_CXX_STANDARD": "20",
@@ -20,31 +19,64 @@
         "SIMCORE_BUILD_SHARED": "OFF"
       }
     },
+
     {
-      "name": "debug",
+      "name": "ninja-debug",
       "inherits": "base",
+      "generator": "Ninja",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
     },
     {
-      "name": "release",
+      "name": "ninja-release",
       "inherits": "base",
+      "generator": "Ninja",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
-    }
-  ],
-  "buildPresets": [
+    },
+
     {
-      "name": "debug",
-      "configurePreset": "debug"
+      "name": "vs-debug",
+      "inherits": "base",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64"
     },
     {
-      "name": "release",
-      "configurePreset": "release"
+      "name": "vs-release",
+      "inherits": "base",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64"
     }
   ],
+
+  "buildPresets": [
+    {
+      "name": "ninja-debug",
+      "configurePreset": "ninja-debug"
+    },
+    {
+      "name": "ninja-release",
+      "configurePreset": "ninja-release"
+    },
+
+    {
+      "name": "vs-debug",
+      "configurePreset": "vs-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "vs-release",
+      "configurePreset": "vs-release",
+      "configuration": "Release"
+    }
+  ],
+
   "testPresets": [
     {
-      "name": "debug",
-      "configurePreset": "debug",
+      "name": "ninja-debug",
+      "configurePreset": "ninja-debug"
+    },
+    {
+      "name": "vs-debug",
+      "configurePreset": "vs-debug",
       "configuration": "Debug"
     }
   ]

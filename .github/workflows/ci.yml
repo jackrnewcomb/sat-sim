@@ -6,11 +6,16 @@ on:
 
 jobs:
   build-test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        preset: [debug]
+  strategy:
+    fail-fast: false
+    matrix:
+      include:
+        - os: ubuntu-latest
+          preset: ninja-debug
+        - os: macos-latest
+          preset: ninja-debug
+        - os: windows-latest
+          preset: vs-debug
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -63,4 +68,4 @@ jobs:
       - name: clang-tidy
         run: |
           chmod +x tools/tidy.sh
-          tools/tidy.sh debug
+          tools/tidy.sh ninja-debug
