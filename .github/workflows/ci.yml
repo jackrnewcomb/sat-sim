@@ -6,22 +6,21 @@ on:
 
 jobs:
   build-test:
-  strategy:
-    fail-fast: false
-    matrix:
-      include:
-        - os: ubuntu-latest
-          preset: ninja-debug
-        - os: macos-latest
-          preset: ninja-debug
-        - os: windows-latest
-          preset: vs-debug
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            preset: ninja-debug
+          - os: macos-latest
+            preset: ninja-debug
+          - os: windows-latest
+            preset: vs-debug
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
 
-      # Install Ninja + Clang tooling
       - name: Install deps (Ubuntu)
         if: runner.os == 'Linux'
         run: |
